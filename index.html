@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AgriShield AI | Smart Crop Protection</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<!-- AgriShield AI Assistant -->
+<div class="chatbot-container" id="chatbotContainer">
+
+    <div class="chatbot-header">
+        <div>
+            <strong>🤖 AgriBuddy</strong>
+            <small>Your farming assistant</small>
+        </div>
+
+        <button id="closeChatbot" class="chat-close-btn">
+            ×
+        </button>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+        <div class="bot-message">
+            Namaste bhai! 🌱 Main AgriBuddy hoon.
+            Crop, disease aur farming ke baare mein poochho.
+        </div>
+    </div>
+
+    <div class="chat-input-area">
+        <input
+            type="text"
+            id="chatInput"
+            placeholder="Ask about your crop..."
+        >
+
+        <button id="sendChatBtn">
+            ➤
+        </button>
+    </div>
+
+</div>
+
+<!-- Floating Chat Button -->
+<button class="chatbot-toggle" id="openChatbot">
+    💬
+</button>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <a href="#home" class="brand-logo">
+    <span class="brand-icon">
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+            <path d="M32 5L54 14V30C54 44 45 54 32 60C19 54 10 44 10 30V14L32 5Z"
+                  fill="currentColor" opacity="0.18"/>
+            <path d="M32 9L50 17V30C50 41 43 49 32 55C21 49 14 41 14 30V17L32 9Z"
+                  fill="none" stroke="currentColor" stroke-width="3"/>
+            <path d="M32 43V20M32 31C24 31 20 26 20 20C28 20 32 25 32 31ZM32 27C40 27 44 22 44 16C36 16 32 21 32 27Z"
+                  fill="none" stroke="currentColor" stroke-width="3"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </span>
+
+    <span class="brand-text">
+        <span class="brand-name">AgriShield</span>
+        <span class="brand-ai">AI</span>
+    </span>
+</a>
+
+     <div class="nav-links">
+    <a href="#home">Home</a>
+    <a href="#features">Features</a>
+    <a href="#dashboard">Dashboard</a>
+    <a href="#about">About</a>
+</div>
+<!-- Language Selector -->
+<div class="language-control">
+    <select id="languageSelect" aria-label="Select language">
+        <option value="en">English</option>
+        <option value="hi">हिंदी</option>
+    </select>
+</div>
+    </nav>
+
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+
+        <div class="hero-content">
+            <p class="tagline">SMART FARMING • HEALTHIER CROPS</p>
+
+            <h1>
+                Protect Your Crops<br>
+                with <span>AgriShield AI</span>
+            </h1>
+
+            <p class="hero-text">
+                Detect possible crop diseases early and get simple
+                management suggestions for better crop protection.
+            </p>
+
+            <a href="#analyze" class="primary-btn">
+                Analyze Your Crop →
+            </a>
+        </div>
+
+        <div class="hero-visual">
+            <div class="crop-icon">🌱</div>
+            <h2>Healthy Crops</h2>
+            <p>Smart insights for farmers</p>
+        </div>
+
+    </section>
+
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+
+        <h2>Our Smart Features</h2>
+
+        <p class="section-description">
+            Simple technology to support better crop management.
+        </p>
+
+        <div class="feature-container">
+
+            <div class="feature-card">
+                <div class="feature-icon">📸</div>
+                <h3>Crop Detection</h3>
+                <p>
+                    Upload a crop image and explore possible
+                    disease or pest-related information.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🌦️</div>
+                <h3>Risk Alerts</h3>
+                <p>
+                    View weather-related crop risk information
+                    in a simple dashboard.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">💡</div>
+                <h3>Smart Suggestions</h3>
+                <p>
+                    Get easy-to-understand management suggestions
+                    for crop protection.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+    <!-- Farmer Dashboard Section -->
+<section class="dashboard-section" id="dashboard">
+
+    <p class="tagline">SMART FARMING DASHBOARD</p>
+
+    <h2>🌾 Your Crop Overview</h2>
+
+    <p class="section-description">
+        Monitor your crop health and receive simple farming insights.
+    </p>
+
+    <div class="dashboard-grid">
+
+        <!-- Crop Health Card -->
+        <div class="dashboard-card">
+            <div class="dashboard-card-top">
+                <span class="dashboard-icon">🌱</span>
+                <span class="status-badge healthy">Healthy</span>
+            </div>
+
+            <h3>Crop Health</h3>
+            <p class="dashboard-value">78%</p>
+            <p>Overall crop health score</p>
+
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 78%;"></div>
+            </div>
+        </div>
+
+
+        <!-- Weather Card -->
+        <div class="dashboard-card">
+            <div class="dashboard-card-top">
+                <span class="dashboard-icon">🌦️</span>
+                <span class="status-badge">Sample Data</span>
+            </div>
+
+            <h3>Weather Status</h3>
+            <p class="dashboard-value">28°C</p>
+            <p>Partly cloudy conditions</p>
+
+            <div class="weather-details">
+                <span>💧 Humidity: 65%</span>
+                <span>💨 Wind: 12 km/h</span>
+            </div>
+        </div>
+
+
+        <!-- Risk Alert Card -->
+        <div class="dashboard-card risk-card">
+            <div class="dashboard-card-top">
+                <span class="dashboard-icon">🔔</span>
+                <span class="status-badge warning">Moderate</span>
+            </div>
+
+            <h3>Crop Risk Alert</h3>
+            <p class="dashboard-value">Medium</p>
+            <p>Humidity may increase disease risk.</p>
+
+            <button class="small-btn" id="riskDetailsBtn">
+                View Details
+            </button>
+
+            <p id="riskDetails" class="risk-details-text"></p>
+        </div>
+
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="activity-box">
+
+        <h3>📋 Recent Activity</h3>
+
+        <div class="activity-item">
+            <span>📸</span>
+            <div>
+                <strong>Crop analysis prototype</strong>
+                <p>Upload an image to start analysis.</p>
+            </div>
+        </div>
+
+        <div class="activity-item">
+            <span>🌦️</span>
+            <div>
+                <strong>Weather monitoring</strong>
+                <p>Sample weather information is displayed.</p>
+            </div>
+        </div>
+
+        <div class="activity-item">
+            <span>🛡️</span>
+            <div>
+                <strong>Crop protection</strong>
+                <p>Regularly monitor your crops for visible changes.</p>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+
+    <!-- Analyze Section Placeholder -->
+ <!-- Crop Analysis Section -->
+<section class="analyze-section" id="analyze">
+
+    <h2>🌱 Analyze Your Crop</h2>
+
+    <p class="section-description">
+        Upload a crop image to explore a sample disease analysis.
+    </p>
+
+    <div class="upload-box">
+
+        <!-- Crop Selection -->
+        <label for="cropSelect">Select Your Crop:</label>
+
+        <select id="cropSelect">
+            <option value="">-- Choose a Crop --</option>
+            <option value="tomato">🍅 Tomato</option>
+            <option value="potato">🥔 Potato</option>
+            <option value="wheat">🌾 Wheat</option>
+            <option value="rice">🌱 Rice</option>
+        </select>
+
+        <!-- Image Upload -->
+        <label for="cropImage">Upload Crop Image:</label>
+
+        <input
+            type="file"
+            id="cropImage"
+            accept="image/*"
+        >
+
+        <!-- Image Preview -->
+        <div class="preview-container">
+            <img id="imagePreview" alt="Uploaded crop preview">
+        </div>
+
+        <!-- Analyze Button -->
+        <button class="primary-btn" id="analyzeBtn">
+            Analyze Crop 🔍
+        </button>
+
+        <!-- Message -->
+        <p id="analysisMessage"></p>
+
+    </div>
+
+    <!-- Result Box -->
+   <!-- Professional Analysis Result -->
+<div class="result-box" id="resultBox">
+
+    <div class="result-header">
+        <div>
+            <p class="result-label">ANALYSIS REPORT</p>
+            <h3>🛡️ Crop Health Report</h3>
+        </div>
+
+        <span class="report-status">Demo Result</span>
+    </div>
+
+    <div class="result-summary">
+
+        <div class="summary-item">
+            <span class="summary-label">Selected Crop</span>
+            <strong id="resultCrop">-</strong>
+        </div>
+
+        <div class="summary-item">
+            <span class="summary-label">Risk Level</span>
+            <strong id="riskLevel">-</strong>
+        </div>
+
+        <div class="summary-item">
+            <span class="summary-label">Confidence</span>
+            <strong id="confidenceScore">-</strong>
+        </div>
+
+    </div>
+
+    <div class="disease-result">
+        <span class="result-label">POSSIBLE CONDITION</span>
+        <h4 id="diseaseName">-</h4>
+        <p id="resultDescription"></p>
+    </div>
+
+    <div class="report-section">
+        <h4>🔎 Possible Symptoms</h4>
+        <ul id="symptomsList"></ul>
+    </div>
+
+    <div class="report-section">
+        <h4>💡 Recommended Management</h4>
+        <ul id="suggestionsList"></ul>
+    </div>
+
+    <div class="report-footer">
+        <span>🕒 <strong>Analyzed:</strong> <span id="analysisTime">-</span></span>
+        <span>🆔 <strong>Report ID:</strong> <span id="reportId">-</span></span>
+    </div>
+
+    <p class="prototype-note">
+        ⚠️ Demo result only. This report is not a professional diagnosis.
+        Consult an agriculture expert before taking treatment decisions.
+    </p>
+
+</div>
+
+</section>
+
+
+    <!-- About Section -->
+    <section class="about" id="about">
+
+        <h2>About AgriShield AI</h2>
+
+        <p>
+            AgriShield AI is a student-built prototype designed
+            to explore early crop disease detection and
+            farmer-friendly crop management support.
+        </p>
+
+    </section>
+
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 AgriShield AI | Student Innovation Project</p>
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
