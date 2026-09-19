@@ -1,0 +1,123 @@
+/* =====================================
+   AgriShield AI - Brand layer, DARK theme (loads after style.css)
+   Deep forest surfaces, soft leaf green, turmeric accent.
+===================================== */
+:root{--bg:#07150F;--bg-alt:#0B1D16;--surface:#10261D;--surface-2:#163227;--line:#24443A;--ink:#EAF5EE;--muted:#9DB8AA;--leaf:#3FBF7F;--leaf-deep:#1B6B45;--turmeric:#E9A820}
+body{font-family:'Mukta',Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:17px}
+h1,h2,h3,h4,h5,.brand-name{font-family:'Poppins','Mukta',sans-serif}
+:focus-visible{outline:3px solid var(--turmeric);outline-offset:2px}
+
+/* Navbar + logo */
+.navbar{background:rgba(7,21,15,.94);border-bottom:1px solid var(--line);padding:10px 6%}
+.brand-logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.brand-icon svg{width:44px;height:44px;display:block}
+.brand-text{display:flex;flex-direction:column;line-height:1.05}
+.brand-line{display:flex;align-items:center;gap:6px}
+.brand-name{font-size:26px;font-weight:800;color:#fff;letter-spacing:-.3px}
+.brand-ai{background:var(--turmeric);color:#16251C;font:700 12px 'Poppins',sans-serif;padding:1px 8px;border-radius:999px}
+.brand-sub{color:var(--muted);font-size:13px;font-weight:500;margin-top:2px}
+.nav-links a{color:var(--ink);font-weight:600}
+.nav-links a:hover{color:var(--leaf)}
+.language-control select{background:var(--surface);color:var(--ink);border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit}
+.login-btn{background:var(--leaf);color:#06140D;border:0;border-radius:999px;padding:10px 22px;font:700 15px 'Mukta',sans-serif;cursor:pointer}
+.login-btn:hover{background:#5BD196}
+
+/* Hero */
+.hero{background:radial-gradient(circle at 85% 20%,rgba(233,168,32,.12),transparent 40%),radial-gradient(circle at 15% 90%,rgba(63,191,127,.14),transparent 45%),var(--bg);padding:72px 8%;gap:48px;align-items:center}
+.hero h1{color:#fff;font-size:clamp(34px,5vw,56px);line-height:1.1;font-weight:800}
+.hero .hero-hindi{color:#fff;font-size:20px;margin-top:18px;max-width:34em}
+.hero .hero-text{color:var(--muted);margin:10px 0 28px;max-width:34em}
+.primary-btn{display:inline-block;background:var(--turmeric);color:#16251C;border:0;border-radius:999px;padding:14px 30px;font:700 17px 'Mukta',sans-serif;text-decoration:none;cursor:pointer}
+.primary-btn:hover{background:#F5BC3A}
+.hero-visual{position:relative;flex:0 0 min(340px,40%);background:var(--surface);border:1px solid var(--line);border-radius:28px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.leaf-scan{display:block;width:100%;height:auto}
+.leaf-scan .sweep{animation:sweep 2.4s ease-in-out 1 forwards}
+@keyframes sweep{from{transform:translateY(0)}to{transform:translateY(320px);opacity:0}}
+.scan-chip{position:absolute;left:-18px;bottom:28px;background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:10px 16px;box-shadow:0 8px 24px rgba(0,0,0,.45);display:flex;flex-direction:column}
+.scan-chip span{color:var(--muted);font-size:14px}
+.scan-chip strong{color:var(--leaf);font:800 20px 'Poppins',sans-serif}
+
+/* Sections */
+.features,.analyze-section,.dashboard-section,.about{background:transparent;padding:72px 8%}
+.analyze-section{background:var(--bg-alt)}
+section:not(.hero) :is(h2,h3,h4,h5,strong,label,.dashboard-value){color:var(--ink)!important}
+section:not(.hero) :is(p,li,small){color:var(--muted)!important}
+section:not(.hero) h2{font-size:clamp(28px,3.5vw,38px)}
+.feature-card,.upload-box,.result-box,.dashboard-card,.activity-box,.history-panel{background:var(--surface)!important;border:1px solid var(--line)!important;border-radius:18px;box-shadow:0 8px 28px rgba(0,0,0,.25)}
+.summary-item,.disease-result,.history-item,.activity-item{background:var(--surface-2)!important;border:1px solid var(--line)!important;border-radius:12px}
+.result-label,.tagline{color:var(--leaf)!important;font-weight:700}
+.report-status{background:rgba(233,168,32,.16);color:#F2C15A;border-radius:999px;padding:4px 12px;font-weight:600}
+.progress-bar{background:var(--surface-2)}
+.progress-fill{background:var(--leaf)}
+.status-badge{background:var(--surface-2);color:var(--muted)}
+.status-badge.healthy{background:rgba(63,191,127,.16);color:#6FDCA0}
+.status-badge.warning{background:rgba(233,168,32,.16);color:#F2C15A}
+.small-btn{background:var(--leaf);color:#06140D;border:0;border-radius:999px;padding:8px 18px;font:700 14px 'Mukta',sans-serif;cursor:pointer}
+
+/* Farm profile + form */
+.profile-card{background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:12px}
+.profile-card h3{font-size:22px}
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px;margin-top:6px}
+.upload-box label{display:block;font-weight:600;margin:14px 0 6px}
+.upload-box :is(select,input[type=text],input[type=number],input[type=file]){width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+.upload-box input::placeholder{color:#6B8778}
+.upload-box input[type=file]{border-style:dashed;padding:22px 14px;background:var(--bg-alt)}
+.upload-box .primary-btn{margin-top:20px}
+.preview-container img{border-radius:12px;max-width:100%}
+
+/* Personalised plan */
+.plan-card{background:rgba(63,191,127,.09);border:1px solid rgba(63,191,127,.28);border-radius:16px;padding:20px 22px;margin:22px 0}
+.plan-group{border-left:4px solid var(--leaf);padding:2px 0 2px 16px;margin:16px 0 0}
+.plan-group h5{color:var(--leaf)!important;font-size:18px;margin-bottom:4px}
+.plan-group ul{padding-left:18px}
+.plan-group li{margin:4px 0}
+
+/* Footer, chatbot, sign-in */
+footer{background:#050F0B;border-top:1px solid var(--line)}
+footer p{color:var(--muted)}
+.chatbot-container{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.55)}
+.chatbot-header{background:var(--leaf-deep);color:#fff}
+.chatbot-header small{color:#BFD8C8}
+.chat-messages{background:var(--surface)}
+.bot-message{background:var(--surface-2);color:var(--ink);border-radius:14px}
+.user-message{background:var(--leaf);color:#06140D;border-radius:14px}
+.chat-input-area{background:var(--surface)}
+.chat-input-area input{border:1.5px solid var(--line);border-radius:999px;color:var(--ink);background:var(--bg)}
+.chatbot-toggle{background:var(--turmeric);color:#16251C}
+.login-card{background:var(--surface);border:1px solid var(--line)}
+.login-card h3{color:var(--ink)}
+.login-card p{color:var(--muted)}
+
+@media (max-width:860px){
+  .nav-links{display:none}
+  .hero{flex-direction:column;align-items:flex-start;padding:48px 6%}
+  .hero-visual{width:100%;max-width:340px;flex:none}
+  .scan-chip{left:12px}
+  .profile-grid{grid-template-columns:1fr}
+  .brand-sub{display:none}
+}
+@media (prefers-reduced-motion:reduce){.leaf-scan .sweep{animation:none;opacity:0}}
+
+/* Camera capture */
+.photo-actions{margin-top:12px}
+.camera-btn{width:100%;background:transparent;color:var(--turmeric);border:1.5px solid var(--turmeric);border-radius:999px;padding:12px 20px;font:700 16px 'Mukta',sans-serif;cursor:pointer}
+.camera-btn:hover{background:rgba(233,168,32,.12)}
+.camera-modal{position:fixed;inset:0;background:rgba(0,0,0,.78);display:none;align-items:center;justify-content:center;z-index:2000;padding:16px}
+.camera-modal.active{display:flex}
+.camera-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;width:min(520px,100%)}
+.camera-card video{display:block;width:100%;max-height:60vh;background:#000;border-radius:12px;object-fit:cover}
+.camera-tip{color:var(--muted);font-size:15px;margin:12px 0}
+.camera-actions{display:flex;gap:12px;align-items:center}
+.camera-actions .primary-btn{margin-top:0;flex:1}
+
+/* Brand refresh: bigger wordmark, Poppins, cleaner logo */
+.navbar{padding:12px 6%}
+.brand-logo{gap:14px}
+.brand-icon svg{width:54px;height:54px;filter:drop-shadow(0 4px 12px rgba(63,191,127,.28))}
+.brand-name{font:700 32px/1 'Poppins',sans-serif;letter-spacing:-.03em;color:#fff}
+.brand-name b{color:var(--leaf);font-weight:700}
+.brand-ai{font:700 12px 'Poppins',sans-serif;padding:3px 9px;margin-left:2px}
+.brand-sub{font-size:14px;margin-top:5px}
+.hero h1{font-size:clamp(32px,4.6vw,52px);font-weight:700;letter-spacing:-.02em;line-height:1.15}
+html[lang="hi"] :is(h1,h2,h3,h4,h5){line-height:1.4;letter-spacing:0}
+@media (max-width:860px){.brand-name{font-size:26px}.brand-icon svg{width:44px;height:44px}}

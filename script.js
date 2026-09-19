@@ -127,7 +127,7 @@ cropImage.addEventListener("change", function () {
 
     if (!file.type.startsWith("image/")) {
         analysisMessage.textContent =
-            "Please select a valid image file.";
+            tr("Please select a valid image file.");
 
         cropImage.value = "";
         imagePreview.style.display = "none";
@@ -141,7 +141,7 @@ cropImage.addEventListener("change", function () {
     imagePreview.style.display = "block";
 
     analysisMessage.textContent =
-        "Image uploaded successfully. Now click Analyze Crop.";
+        tr("Image uploaded successfully. Now click Analyze Crop.");
 
     resultBox.style.display = "none";
 
@@ -158,7 +158,7 @@ analyzeBtn.addEventListener("click", function () {
     if (selectedCrop === "") {
 
         analysisMessage.textContent =
-            "Please select a crop first.";
+            tr("Please select a crop first.");
 
         resultBox.style.display = "none";
 
@@ -169,7 +169,7 @@ analyzeBtn.addEventListener("click", function () {
     if (!selectedImage) {
 
         analysisMessage.textContent =
-            "Please upload a crop image first.";
+            tr("Please upload a crop image first.");
 
         resultBox.style.display = "none";
 
@@ -216,7 +216,7 @@ analyzeBtn.addEventListener("click", function () {
     // Add current date and time
     const currentTime = new Date();
 
-    analysisTime.textContent = currentTime.toLocaleString();
+    analysisTime.textContent = currentTime.toLocaleString(currentLang() === "hi" ? "hi-IN" : undefined);
 
     // Generate demo report ID
     const generatedReportId =
@@ -228,7 +228,7 @@ analyzeBtn.addEventListener("click", function () {
     resultBox.style.display = "block";
 
     analysisMessage.textContent =
-        "Demo analysis completed successfully!";
+        tr("Demo analysis completed successfully!");
 
     // Scroll smoothly to report
     resultBox.scrollIntoView({
@@ -286,9 +286,13 @@ function getBotResponse(question) {
 
     const text = question.toLowerCase();
 
+    if (currentLang() === "hi") {
+        return getBotResponseHi(text);
+    }
+
     if (
         text.includes("hello") ||
-        text.includes("hi") ||
+        /\bhi\b/.test(text) ||
         text.includes("namaste") ||
         text.includes("नमस्ते")
     ) {
@@ -371,73 +375,355 @@ chatInput.addEventListener("keydown", function (event) {
 });
 
 
-/* =================================
-   ENGLISH / HINDI TOGGLE
-   ================================= */
+/* =====================================
+   LOCAL REPORT HISTORY + DEMO SIGN-IN
+===================================== */
 
-const languageSelect = document.getElementById("languageSelect");
+const historyList = document.getElementById("historyList");
+const clearHistoryBtn = document.getElementById("clearHistoryBtn");
+const openLoginBtn = document.getElementById("openLoginBtn");
+const closeLoginBtn = document.getElementById("closeLoginBtn");
+const loginModal = document.getElementById("loginModal");
+const googleLoginBtn = document.getElementById("googleLoginBtn");
+const loginStatus = document.getElementById("loginStatus");
 
-const translations = {
+function getSavedReports() {
+    try { return JSON.parse(localStorage.getItem("agrishieldReports") || "[]"); }
+    catch (error) { return []; }
+}
 
-    en: {
-        home: "Home",
-        features: "Features",
-        analyze: "Analyze",
-        about: "About"
-    },
-
-    hi: {
-        home: "होम",
-        features: "फीचर्स",
-        analyze: "विश्लेषण",
-        about: "हमारे बारे में"
+function renderHistory() {
+    if (!historyList) return;
+    const reports = getSavedReports();
+    historyList.innerHTML = "";
+    if (!reports.length) {
+        historyList.innerHTML = '<p class="empty-history">' + tr("No analysis reports saved yet.") + '</p>';
+        return;
     }
+    reports.slice(0, 8).forEach(function (report) {
+        const item = document.createElement("div");
+        item.className = "history-item";
+        const left = document.createElement("div");
+        const title = document.createElement("strong");
+        title.textContent = tr(report.crop) + " — " + tr(report.disease);
+        const meta = document.createElement("span");
+        meta.textContent = report.time + " · " + tr("Report ID") + ": " + report.id;
+        left.append(title, meta);
+        const risk = document.createElement("strong");
+        risk.textContent = tr(report.risk) + " " + tr("Risk");
+        item.append(left, risk);
+        historyList.appendChild(item);
+    });
+}
 
+function saveReport(report) {
+    const reports = getSavedReports();
+    reports.unshift(report);
+    localStorage.setItem("agrishieldReports", JSON.stringify(reports.slice(0, 20)));
+    renderHistory();
+}
+
+if (clearHistoryBtn) {
+    clearHistoryBtn.addEventListener("click", function () {
+        localStorage.removeItem("agrishieldReports");
+        renderHistory();
+    });
+}
+
+const originalAnalyzeButton = document.getElementById("analyzeBtn");
+if (originalAnalyzeButton) {
+    originalAnalyzeButton.addEventListener("click", function () {
+        setTimeout(function () {
+            const crop = document.getElementById("resultCrop");
+            const disease = document.getElementById("diseaseName");
+            const risk = document.getElementById("riskLevel");
+            const time = document.getElementById("analysisTime");
+            const id = document.getElementById("reportId");
+            if (crop && crop.textContent !== "-") {
+                saveReport({ crop: crop.textContent, disease: disease.textContent, risk: risk.textContent, time: time.textContent, id: id.textContent });
+            }
+        }, 0);
+    });
+}
+
+function openLoginModal() {
+    if (!loginModal) return;
+    loginModal.classList.add("active");
+    loginModal.setAttribute("aria-hidden", "false");
+}
+function closeLoginModal() {
+    if (!loginModal) return;
+    loginModal.classList.remove("active");
+    loginModal.setAttribute("aria-hidden", "true");
+}
+if (openLoginBtn) openLoginBtn.addEventListener("click", openLoginModal);
+if (closeLoginBtn) closeLoginBtn.addEventListener("click", closeLoginModal);
+if (loginModal) loginModal.addEventListener("click", function (event) { if (event.target === loginModal) closeLoginModal(); });
+if (googleLoginBtn) {
+    googleLoginBtn.addEventListener("click", function () {
+        localStorage.setItem("agrishieldDemoUser", "Farmer Demo User");
+        if (loginStatus) loginStatus.textContent = tr("Demo sign-in successful! Real Google login can be enabled by connecting Firebase Authentication.");
+        googleLoginBtn.textContent = tr("✓ Signed in (Demo)");
+    });
+}
+renderHistory();
+
+
+/* =====================================
+   PERSONALISED GUIDANCE
+   Plan changes with farmer name, land size, crop stage and watering method
+===================================== */
+
+const PROFILE_KEY = "agrishieldProfile";
+const profileIds = { name: "farmerName", land: "farmLand", stage: "cropStage", water: "waterSource" };
+
+const stageTips = {
+    sowing: "Seedlings are delicate and infection spreads fast, so check them every 2 to 3 days.",
+    growing: "Leaves are your early warning. Check the underside of leaves too, not just the top.",
+    flowering: "Flowering is a sensitive stage. Acting early protects your flowers and fruit.",
+    harvest: "You are close to harvest. Check the waiting period on any spray label before picking."
 };
 
+const waterTips = {
+    rainfed: "Rain-fed field: after rain, wet leaves raise disease risk, so inspect the crop the next morning.",
+    canal: "Canal water: avoid flooding the field and irrigate in the morning so leaves dry by evening.",
+    borewell: "Borewell: water in the morning and avoid over-irrigation. Wet soil helps disease spread.",
+    drip: "Drip irrigation: you already keep leaves dry, so keep it that way and check for leaks near affected plants."
+};
 
-// Add data-language attributes to your navbar links
-const navLinks = document.querySelectorAll(".nav-links a");
-
-navLinks.forEach(function (link) {
-
-    const linkText = link.textContent.trim().toLowerCase();
-
-    if (linkText === "home") {
-        link.dataset.languageKey = "home";
-    }
-
-    if (linkText === "features") {
-        link.dataset.languageKey = "features";
-    }
-
-    if (linkText === "analyze") {
-        link.dataset.languageKey = "analyze";
-    }
-
-    if (linkText === "about") {
-        link.dataset.languageKey = "about";
-    }
-
-});
-
-
-// Change navbar language
-languageSelect.addEventListener("change", function () {
-
-    const selectedLanguage = languageSelect.value;
-
-    navLinks.forEach(function (link) {
-
-        const key = link.dataset.languageKey;
-
-        if (
-            key &&
-            translations[selectedLanguage][key]
-        ) {
-            link.textContent = translations[selectedLanguage][key];
-        }
-
+function readProfile() {
+    const profile = {};
+    Object.keys(profileIds).forEach(function (key) {
+        const el = document.getElementById(profileIds[key]);
+        profile[key] = el ? el.value.trim() : "";
     });
+    return profile;
+}
 
+function saveProfile() {
+    try { localStorage.setItem(PROFILE_KEY, JSON.stringify(readProfile())); } catch (e) {}
+    updateGreeting();
+}
+
+function loadProfile() {
+    try {
+        const saved = JSON.parse(localStorage.getItem(PROFILE_KEY) || "{}");
+        Object.keys(profileIds).forEach(function (key) {
+            const el = document.getElementById(profileIds[key]);
+            if (el && saved[key]) el.value = saved[key];
+        });
+    } catch (e) {}
+    updateGreeting();
+}
+
+let lastAnalyzedCrop = "";
+
+function localizedCrop(key) {
+    const en = cropData[key];
+    if (!en) return null;
+    return currentLang() === "hi" ? Object.assign({}, en, CROP_HI[key]) : en;
+}
+
+function updateGreeting() {
+    const greeting = document.getElementById("personalGreeting");
+    if (!greeting) return;
+    const name = readProfile().name;
+    if (name) {
+        greeting.textContent = currentLang() === "hi"
+            ? "नमस्ते, " + name + " जी। आपकी सलाह आपके खेत के हिसाब से तैयार है।"
+            : "Namaste, " + name + " ji. Your advice is set for your farm.";
+    } else {
+        greeting.textContent = tr("Your advice will be shaped around these answers.");
+    }
+}
+
+function renderPlan() {
+    const box = document.getElementById("planList");
+    const data = localizedCrop(lastAnalyzedCrop);
+    if (!box || !data || resultBox.style.display !== "block") return;
+
+    const hi = currentLang() === "hi";
+    const p = readProfile();
+    const acres = parseFloat(p.land) || 1;
+    const spots = Math.min(20, Math.max(5, Math.round(acres * 5)));
+    const s = data.suggestions;
+
+    document.getElementById("planTitle").textContent = hi
+        ? (p.name ? p.name + " जी के लिए " + data.cropName + " की योजना" : "आपकी " + data.cropName + " की योजना")
+        : (p.name ? "Plan for " + p.name + " ji's " + data.cropName.toLowerCase() : "Your " + data.cropName.toLowerCase() + " plan");
+
+    const scout = hi
+        ? "खेत में ज़िगज़ैग चलिए और लगभग " + spots + " जगह देखिए" + (p.land ? " (आपके " + p.land + " एकड़ में)" : "") + "। देखिए कि नुकसान कहाँ फैल रहा है।"
+        : "Walk your field in a zigzag and check about " + spots + " spots" + (p.land ? " across your " + p.land + " acres" : "") + ". Note where the damage is spreading.";
+
+    const groups = [
+        [tr("Today"), [s[0], tr(waterTips[p.water])]],
+        [tr("This week"), [scout, tr(stageTips[p.stage]), s[s.length - 1]]],
+        [tr("To prevent it coming back"), [s[1], s[2]]]
+    ];
+
+    box.innerHTML = "";
+    groups.forEach(function (group) {
+        const wrap = document.createElement("div");
+        wrap.className = "plan-group";
+        const title = document.createElement("h5");
+        title.textContent = group[0];
+        const list = document.createElement("ul");
+        group[1].filter(Boolean).forEach(function (tip) {
+            const li = document.createElement("li");
+            li.textContent = tip;
+            list.appendChild(li);
+        });
+        wrap.append(title, list);
+        box.appendChild(wrap);
+    });
+}
+
+// Show the analysis text in the selected language
+function localizeResult() {
+    const d = localizedCrop(lastAnalyzedCrop);
+    if (!d || resultBox.style.display !== "block") return;
+    resultCrop.textContent = d.cropName;
+    riskLevel.textContent = tr(cropData[lastAnalyzedCrop].risk);
+    diseaseName.textContent = d.disease;
+    resultDescription.textContent = d.description;
+    symptomsList.innerHTML = "";
+    suggestionsList.innerHTML = "";
+    d.symptoms.forEach(function (t) { const li = document.createElement("li"); li.textContent = t; symptomsList.appendChild(li); });
+    d.suggestions.forEach(function (t) { const li = document.createElement("li"); li.textContent = t; suggestionsList.appendChild(li); });
+}
+
+Object.values(profileIds).forEach(function (id) {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("change", saveProfile);
 });
+
+analyzeBtn.addEventListener("click", function () {
+    saveProfile();
+    setTimeout(function () {
+        if (resultBox.style.display === "block") {
+            lastAnalyzedCrop = cropSelect.value;
+            localizeResult();
+            renderPlan();
+        }
+    }, 0);
+});
+
+loadProfile();
+
+
+/* =====================================
+   CAMERA CAPTURE
+   Live camera where the browser allows it, phone camera app as fallback
+===================================== */
+
+const openCameraBtn = document.getElementById("openCameraBtn");
+const cameraModal = document.getElementById("cameraModal");
+const cameraVideo = document.getElementById("cameraVideo");
+const cameraCanvas = document.getElementById("cameraCanvas");
+const captureBtn = document.getElementById("captureBtn");
+const closeCameraBtn = document.getElementById("closeCameraBtn");
+const cameraFallback = document.getElementById("cameraFallback");
+
+let cameraStream = null;
+
+// Put a captured or picked image into the main upload input, so the existing preview and analysis work unchanged
+function setCropImage(file) {
+    const transfer = new DataTransfer();
+    transfer.items.add(file);
+    cropImage.files = transfer.files;
+    cropImage.dispatchEvent(new Event("change"));
+}
+
+function stopCamera() {
+    if (cameraStream) {
+        cameraStream.getTracks().forEach(function (track) { track.stop(); });
+        cameraStream = null;
+    }
+    cameraVideo.srcObject = null;
+    cameraModal.classList.remove("active");
+    cameraModal.setAttribute("aria-hidden", "true");
+}
+
+async function openCamera() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        cameraFallback.click();
+        return;
+    }
+    try {
+        cameraStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: { ideal: "environment" } },
+            audio: false
+        });
+        cameraVideo.srcObject = cameraStream;
+        cameraModal.classList.add("active");
+        cameraModal.setAttribute("aria-hidden", "false");
+    } catch (error) {
+        analysisMessage.textContent =
+            tr("Camera could not start. Allow camera access in your browser, or use the upload option.");
+    }
+}
+
+function capturePhoto() {
+    if (!cameraVideo.videoWidth) return;
+    cameraCanvas.width = cameraVideo.videoWidth;
+    cameraCanvas.height = cameraVideo.videoHeight;
+    cameraCanvas.getContext("2d").drawImage(cameraVideo, 0, 0);
+    cameraCanvas.toBlob(function (blob) {
+        if (!blob) return;
+        setCropImage(new File([blob], "crop-photo-" + Date.now() + ".jpg", { type: "image/jpeg" }));
+        stopCamera();
+    }, "image/jpeg", 0.92);
+}
+
+openCameraBtn.addEventListener("click", openCamera);
+captureBtn.addEventListener("click", capturePhoto);
+closeCameraBtn.addEventListener("click", stopCamera);
+cameraModal.addEventListener("click", function (event) { if (event.target === cameraModal) stopCamera(); });
+document.addEventListener("keydown", function (event) { if (event.key === "Escape") stopCamera(); });
+cameraFallback.addEventListener("change", function () {
+    if (cameraFallback.files[0]) setCropImage(cameraFallback.files[0]);
+});
+
+
+/* =====================================
+   LANGUAGE SWITCH, RISK DETAILS, HINDI CHATBOT
+===================================== */
+
+const languageSelect = document.getElementById("languageSelect");
+const riskDetailsBtn = document.getElementById("riskDetailsBtn");
+const riskDetails = document.getElementById("riskDetails");
+const RISK_TEXT = "High humidity helps fungal diseases spread. Avoid overhead watering and check leaves every day.";
+
+if (riskDetailsBtn && riskDetails) {
+    riskDetailsBtn.addEventListener("click", function () {
+        const open = riskDetails.dataset.open === "1";
+        riskDetails.dataset.open = open ? "0" : "1";
+        riskDetails.textContent = open ? "" : tr(RISK_TEXT);
+    });
+}
+
+window.onLanguageChange = function () {
+    updateGreeting();
+    localizeResult();
+    renderPlan();
+    renderHistory();
+    if (riskDetails && riskDetails.dataset.open === "1") riskDetails.textContent = tr(RISK_TEXT);
+};
+
+languageSelect.addEventListener("change", function () {
+    setLanguage(languageSelect.value);
+});
+
+function getBotResponseHi(text) {
+    if (/\bhi\b|hello|namaste|नमस्ते|नमस्कार/.test(text)) return "नमस्ते भाई! 🌱 बताइए, आपकी फसल के बारे में क्या मदद चाहिए?";
+    if (/tomato|टमाटर/.test(text)) return "टमाटर के पत्तों पर धब्बे हैं? 🌿 फोटो अपलोड करके नमूना जाँच देखिए। असली इलाज से पहले कृषि विशेषज्ञ से पक्का कर लीजिए।";
+    if (/disease|रोग|बीमारी/.test(text)) return "फसल के रोग के लिए प्रभावित पत्ते की साफ़ फोटो लीजिए, फसल चुनिए और 'फसल की जाँच करें' दबाइए।";
+    if (/weather|मौसम/.test(text)) return "ज़्यादा नमी और लगातार बारिश से कुछ फसल रोगों का खतरा बढ़ सकता है। डैशबोर्ड में जोखिम अलर्ट देखिए।";
+    if (/water|पानी/.test(text)) return "फसल को ज़रूरत के हिसाब से ही पानी दीजिए। ज़्यादा पानी से जड़ और पत्तों को नुकसान हो सकता है।";
+    if (/help|madad|मदद/.test(text)) return "मैं फसल चुनने, नमूना जाँच, मौसम के जोखिम और फसल की देखभाल की बुनियादी जानकारी में मदद कर सकता हूँ। 🌾";
+    return "भाई, मैं अभी डेमो सहायक हूँ। आप फसल का नाम, रोग, मौसम या खेती की देखभाल के बारे में पूछ सकते हैं। 🌱";
+}
+
+languageSelect.value = currentLang();
+setLanguage(currentLang());
