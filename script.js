@@ -216,7 +216,7 @@ analyzeBtn.addEventListener("click", function () {
     // Add current date and time
     const currentTime = new Date();
 
-    analysisTime.textContent = currentTime.toLocaleString(currentLang() === "hi" ? "hi-IN" : undefined);
+    analysisTime.textContent = currentTime.toLocaleString(({ hi: "hi-IN", mr: "mr-IN" })[currentLang()]);
 
     // Generate demo report ID
     const generatedReportId =
@@ -289,6 +289,9 @@ function getBotResponse(question) {
     if (currentLang() === "hi") {
         return getBotResponseHi(text);
     }
+    if (currentLang() === "mr") {
+        return getBotResponseMr(text);
+    }
 
     if (
         text.includes("hello") ||
@@ -355,6 +358,10 @@ function sendChatMessage() {
 
     setTimeout(function () {
         addChatMessage(response, "bot");
+        if (speakNextReply) {
+            speakText(response, null);
+            speakNextReply = false;
+        }
     }, 300);
 
     chatInput.value = "";
@@ -521,7 +528,8 @@ let lastAnalyzedCrop = "";
 function localizedCrop(key) {
     const en = cropData[key];
     if (!en) return null;
-    return currentLang() === "hi" ? Object.assign({}, en, CROP_HI[key]) : en;
+    const t = CROP_TR[currentLang()];
+    return t ? Object.assign({}, en, t[key]) : en;
 }
 
 function updateGreeting() {
@@ -529,9 +537,11 @@ function updateGreeting() {
     if (!greeting) return;
     const name = readProfile().name;
     if (name) {
-        greeting.textContent = currentLang() === "hi"
-            ? "नमस्ते, " + name + " जी। आपकी सलाह आपके खेत के हिसाब से तैयार है।"
-            : "Namaste, " + name + " ji. Your advice is set for your farm.";
+        greeting.textContent = pick(
+            "Namaste, " + name + " ji. Your advice is set for your farm.",
+            "नमस्ते, " + name + " जी। आपकी सलाह आपके खेत के हिसाब से तैयार है।",
+            "नमस्कार, " + name + " जी. तुमचा सल्ला तुमच्या शेतानुसार तयार आहे."
+        );
     } else {
         greeting.textContent = tr("Your advice will be shaped around these answers.");
     }
@@ -542,19 +552,23 @@ function renderPlan() {
     const data = localizedCrop(lastAnalyzedCrop);
     if (!box || !data || resultBox.style.display !== "block") return;
 
-    const hi = currentLang() === "hi";
     const p = readProfile();
     const acres = parseFloat(p.land) || 1;
     const spots = Math.min(20, Math.max(5, Math.round(acres * 5)));
     const s = data.suggestions;
+    const crop = data.cropName;
 
-    document.getElementById("planTitle").textContent = hi
-        ? (p.name ? p.name + " जी के लिए " + data.cropName + " की योजना" : "आपकी " + data.cropName + " की योजना")
-        : (p.name ? "Plan for " + p.name + " ji's " + data.cropName.toLowerCase() : "Your " + data.cropName.toLowerCase() + " plan");
+    document.getElementById("planTitle").textContent = pick(
+        p.name ? "Plan for " + p.name + " ji's " + crop.toLowerCase() : "Your " + crop.toLowerCase() + " plan",
+        p.name ? p.name + " जी के लिए " + crop + " की योजना" : "आपकी " + crop + " की योजना",
+        p.name ? p.name + " जी यांच्यासाठी " + crop + " योजना" : "तुमची " + crop + " योजना"
+    );
 
-    const scout = hi
-        ? "खेत में ज़िगज़ैग चलिए और लगभग " + spots + " जगह देखिए" + (p.land ? " (आपके " + p.land + " एकड़ में)" : "") + "। देखिए कि नुकसान कहाँ फैल रहा है।"
-        : "Walk your field in a zigzag and check about " + spots + " spots" + (p.land ? " across your " + p.land + " acres" : "") + ". Note where the damage is spreading.";
+    const scout = pick(
+        "Walk your field in a zigzag and check about " + spots + " spots" + (p.land ? " across your " + p.land + " acres" : "") + ". Note where the damage is spreading.",
+        "खेत में ज़िगज़ैग चलिए और लगभग " + spots + " जगह देखिए" + (p.land ? " (आपके " + p.land + " एकड़ में)" : "") + "। देखिए कि नुकसान कहाँ फैल रहा है।",
+        "शेतात नागमोडी चाला आणि सुमारे " + spots + " ठिकाणी पाहणी करा" + (p.land ? " (तुमच्या " + p.land + " एकरात)" : "") + ". नुकसान कुठे पसरत आहे ते नोंदवा."
+    );
 
     const groups = [
         [tr("Today"), [s[0], tr(waterTips[p.water])]],
@@ -768,3 +782,263 @@ document.addEventListener("pointerdown", function (event) {
     clearTimeout(icon._glowTimer);
     icon._glowTimer = setTimeout(function () { icon.classList.remove("glow-pulse"); }, 900);
 });
+
+
+
+/* =====================================
+   MARATHI CHATBOT
+===================================== */
+
+function getBotResponseMr(text) {
+    if (/\bhi\b|hello|namaste|नमस्कार|नमस्ते/.test(text)) return "नमस्कार भाऊ! 🌱 सांगा, तुमच्या पिकाबद्दल काय मदत हवी आहे?";
+    if (/tomato|टोमॅटो/.test(text)) return "टोमॅटोच्या पानांवर डाग दिसत आहेत का? 🌿 फोटो अपलोड करून नमुना तपासणी पहा. खऱ्या उपचारापूर्वी कृषी तज्ज्ञांकडून खात्री करून घ्या.";
+    if (/disease|रोग|बीमारी/.test(text)) return "पिकाच्या रोगासाठी प्रभावित पानाचा स्पष्ट फोटो घ्या, पीक निवडा आणि 'पिकाची तपासणी करा' दाबा.";
+    if (/weather|हवामान|मौसम/.test(text)) return "जास्त आर्द्रता आणि सततच्या पावसामुळे काही पिकांच्या रोगांचा धोका वाढू शकतो. डॅशबोर्डवर धोक्याचा इशारा पहा.";
+    if (/water|पाणी/.test(text)) return "पिकाला गरजेनुसारच पाणी द्या. जास्त पाण्यामुळे मुळांना आणि पानांना नुकसान होऊ शकते.";
+    if (/help|madad|मदत/.test(text)) return "मी पीक निवडणे, नमुना तपासणी, हवामानाचा धोका आणि पिकाची काळजी याबद्दल मूलभूत माहिती देऊन मदत करू शकतो. 🌾";
+    return "भाऊ, मी सध्या डेमो सहाय्यक आहे. तुम्ही पिकाचे नाव, रोग, हवामान किंवा शेतीच्या काळजीबद्दल विचारू शकता. 🌱";
+}
+
+
+/* =====================================
+   LIVE WEATHER (Open-Meteo, no API key needed)
+   Shows Pune by default. "Use my location" asks the browser for the farmer's location.
+===================================== */
+
+const weatherBadge = document.getElementById("weatherBadge");
+const weatherTemp = document.getElementById("weatherTemp");
+const weatherDesc = document.getElementById("weatherDesc");
+const weatherHumidity = document.getElementById("weatherHumidity");
+const weatherWind = document.getElementById("weatherWind");
+const weatherPlace = document.getElementById("weatherPlace");
+const weatherActivity = document.getElementById("weatherActivity");
+const riskBadge = document.getElementById("riskBadge");
+const riskValue = document.getElementById("riskValue");
+const riskText = document.getElementById("riskText");
+const useLocationBtn = document.getElementById("useLocationBtn");
+
+const DEFAULT_PLACE = { lat: 18.5204, lon: 73.8567 };
+const GEO_KEY = "agrishieldGeo";
+let lastWeather = null;
+let geoPlace = "";
+
+const WEATHER_TEXT = {
+    clear:   ["Clear sky", "साफ़ आसमान", "निरभ्र आकाश"],
+    partly:  ["Partly cloudy", "आंशिक रूप से बादल", "अंशतः ढगाळ"],
+    cloudy:  ["Cloudy", "बादल छाए हैं", "ढगाळ"],
+    fog:     ["Foggy", "कोहरा", "धुके"],
+    drizzle: ["Light drizzle", "हल्की बूंदाबांदी", "हलकी रिमझिम"],
+    rain:    ["Rain", "बारिश", "पाऊस"],
+    storm:   ["Thunderstorm", "आंधी और बिजली के साथ बारिश", "वादळी पाऊस"]
+};
+
+function weatherGroup(code) {
+    if (code === 0) return "clear";
+    if (code <= 2) return "partly";
+    if (code === 3) return "cloudy";
+    if (code === 45 || code === 48) return "fog";
+    if (code >= 51 && code <= 57) return "drizzle";
+    if ((code >= 61 && code <= 67) || (code >= 80 && code <= 82)) return "rain";
+    if (code >= 95) return "storm";
+    return "cloudy";
+}
+
+// Simple risk rule: wet and humid weather helps crop diseases spread
+function weatherRiskLevel(w) {
+    const wet = ["drizzle", "rain", "storm"].indexOf(weatherGroup(w.code)) !== -1;
+    if (w.humidity >= 80 || (wet && w.humidity >= 65)) return "High";
+    if (w.humidity >= 65 || wet) return "Medium";
+    return "Low";
+}
+
+function renderWeather() {
+    if (!lastWeather) return;
+    const w = lastWeather;
+    const idx = { en: 0, hi: 1, mr: 2 }[currentLang()];
+
+    weatherBadge.textContent = pick("Live", "लाइव", "थेट");
+    weatherBadge.classList.add("healthy");
+    weatherTemp.textContent = Math.round(w.temp) + "°C";
+    weatherDesc.textContent = WEATHER_TEXT[weatherGroup(w.code)][idx];
+    weatherHumidity.textContent = pick("💧 Humidity: ", "💧 नमी: ", "💧 आर्द्रता: ") + Math.round(w.humidity) + "%";
+    weatherWind.textContent = pick("💨 Wind: ", "💨 हवा: ", "💨 वारा: ") + Math.round(w.wind) + pick(" km/h", " किमी/घंटा", " किमी/तास");
+
+    if (w.isDefault) {
+        weatherPlace.textContent = "📍 " + pick("Pune (default)", "पुणे (डिफ़ॉल्ट)", "पुणे (डिफॉल्ट)");
+        weatherActivity.textContent = pick(
+            "Live weather for Pune. Tap 'Use my location' for your area.",
+            "पुणे का लाइव मौसम। अपने इलाके के लिए 'मेरी लोकेशन इस्तेमाल करें' दबाइए।",
+            "पुण्याचे थेट हवामान. तुमच्या भागासाठी 'माझे ठिकाण वापरा' दाबा."
+        );
+    } else {
+        weatherPlace.textContent = "📍 " + (geoPlace || pick("Your location", "आपकी लोकेशन", "तुमचे ठिकाण"));
+        weatherActivity.textContent = tr("Live weather from your location.");
+    }
+
+    const level = weatherRiskLevel(w);
+    riskValue.textContent = tr(level);
+    riskBadge.className = "status-badge " + (level === "Low" ? "healthy" : level === "Medium" ? "warning" : "danger");
+    riskBadge.textContent = level === "Low" ? pick("Low", "कम", "कमी") : level === "Medium" ? pick("Moderate", "मध्यम", "मध्यम") : pick("High", "उच्च", "जास्त");
+    riskText.textContent = level === "High"
+        ? pick("High humidity or rain. Diseases can spread fast.", "ज़्यादा नमी या बारिश। रोग तेज़ी से फैल सकते हैं।", "जास्त आर्द्रता किंवा पाऊस. रोग वेगाने पसरू शकतात.")
+        : level === "Medium"
+            ? tr("Humidity may increase disease risk.")
+            : pick("Dry weather. Disease risk is low today.", "मौसम सूखा है। आज रोग का खतरा कम है।", "हवामान कोरडे आहे. आज रोगाचा धोका कमी आहे.");
+}
+
+function fetchWeather(lat, lon, isDefault) {
+    const url = "https://api.open-meteo.com/v1/forecast?latitude=" + lat + "&longitude=" + lon +
+        "&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&timezone=auto";
+    fetch(url)
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+            const c = data.current;
+            if (!c) return;
+            lastWeather = { temp: c.temperature_2m, humidity: c.relative_humidity_2m, wind: c.wind_speed_10m, code: c.weather_code, isDefault: isDefault };
+            renderWeather();
+        })
+        .catch(function () { /* offline: the sample data stays on the page */ });
+}
+
+function reverseGeocode(lat, lon) {
+    fetch("https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=" + lat + "&longitude=" + lon + "&localityLanguage=en")
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+            geoPlace = d.city || d.locality || d.principalSubdivision || "";
+            renderWeather();
+        })
+        .catch(function () {});
+}
+
+function requestLocation() {
+    if (!navigator.geolocation) {
+        weatherActivity.textContent = pick("Location is not supported in this browser.", "इस ब्राउज़र में लोकेशन की सुविधा नहीं है।", "या ब्राउझरमध्ये ठिकाणाची सुविधा नाही.");
+        return;
+    }
+    navigator.geolocation.getCurrentPosition(function (pos) {
+        try { localStorage.setItem(GEO_KEY, "1"); } catch (e) {}
+        fetchWeather(pos.coords.latitude, pos.coords.longitude, false);
+        reverseGeocode(pos.coords.latitude, pos.coords.longitude);
+    }, function () {
+        weatherActivity.textContent = pick(
+            "Location permission was not given. Showing Pune weather.",
+            "लोकेशन की अनुमति नहीं मिली। पुणे का मौसम दिखा रहे हैं।",
+            "ठिकाणाची परवानगी मिळाली नाही. पुण्याचे हवामान दाखवत आहोत."
+        );
+        if (!lastWeather) fetchWeather(DEFAULT_PLACE.lat, DEFAULT_PLACE.lon, true);
+    }, { timeout: 10000, maximumAge: 600000 });
+}
+
+useLocationBtn.addEventListener("click", requestLocation);
+
+// Start: Pune first (no permission popup). If the farmer allowed location before, use it.
+fetchWeather(DEFAULT_PLACE.lat, DEFAULT_PLACE.lon, true);
+try { if (localStorage.getItem(GEO_KEY) === "1") requestLocation(); } catch (e) {}
+
+
+/* =====================================
+   VOICE: speak to the chatbot, listen to the report
+   Uses the browser's built-in speech features (works best in Chrome)
+===================================== */
+
+const micBtn = document.getElementById("micBtn");
+const listenBtn = document.getElementById("listenBtn");
+const voiceNote = document.getElementById("voiceNote");
+const VOICE_LANG = { en: "en-IN", hi: "hi-IN", mr: "mr-IN" };
+const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognizer = null;
+let speakNextReply = false;
+
+function speakText(text, button) {
+    if (!("speechSynthesis" in window)) return false;
+    const lang = VOICE_LANG[currentLang()];
+    const voices = window.speechSynthesis.getVoices();
+    const voice = voices.find(function (v) { return v.lang.replace("_", "-") === lang; }) ||
+                  voices.find(function (v) { return v.lang.toLowerCase().indexOf(lang.slice(0, 2)) === 0; });
+
+    if (voices.length && !voice && lang !== "en-IN") {
+        voiceNote.textContent = pick("", "इस डिवाइस पर हिंदी आवाज़ उपलब्ध नहीं है।", "या डिव्हाइसवर मराठी आवाज उपलब्ध नाही.");
+        return false;
+    }
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = lang;
+    if (voice) utterance.voice = voice;
+    utterance.rate = 0.95;
+    if (button) {
+        button.classList.add("speaking");
+        utterance.onend = utterance.onerror = function () { button.classList.remove("speaking"); };
+    }
+    voiceNote.textContent = "";
+    window.speechSynthesis.speak(utterance);
+    return true;
+}
+
+function reportSpeech() {
+    const d = localizedCrop(lastAnalyzedCrop);
+    if (!d || resultBox.style.display !== "block") return "";
+    const risk = tr(cropData[lastAnalyzedCrop].risk);
+    return pick(
+        d.cropName + ". Possible problem: " + d.disease + ". Risk level: " + risk + ". What to do: " + d.suggestions[0] + ". " + d.suggestions[1] + ". Please also check with an agriculture expert.",
+        d.cropName + "। संभावित समस्या: " + d.disease + "। जोखिम स्तर: " + risk + "। क्या करें: " + d.suggestions[0] + "। " + d.suggestions[1] + "। कृपया कृषि विशेषज्ञ से भी सलाह लीजिए।",
+        d.cropName + ". संभाव्य समस्या: " + d.disease + ". धोक्याची पातळी: " + risk + ". काय करावे: " + d.suggestions[0] + ". " + d.suggestions[1] + ". कृपया कृषी तज्ज्ञांचाही सल्ला घ्या."
+    );
+}
+
+listenBtn.addEventListener("click", function () {
+    if (!("speechSynthesis" in window)) {
+        voiceNote.textContent = pick("Voice is not supported in this browser.", "इस ब्राउज़र में आवाज़ की सुविधा नहीं है।", "या ब्राउझरमध्ये आवाजाची सुविधा नाही.");
+        return;
+    }
+    if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+        listenBtn.classList.remove("speaking");
+        return;
+    }
+    const text = reportSpeech();
+    if (text) speakText(text, listenBtn);
+});
+
+if (!SpeechRec) {
+    micBtn.style.display = "none";
+} else {
+    micBtn.addEventListener("click", function () {
+        if (recognizer) { recognizer.stop(); return; }
+        recognizer = new SpeechRec();
+        recognizer.lang = VOICE_LANG[currentLang()];
+        recognizer.interimResults = false;
+        recognizer.maxAlternatives = 1;
+        micBtn.classList.add("listening");
+        recognizer.onresult = function (event) {
+            chatInput.value = event.results[0][0].transcript;
+            speakNextReply = true;
+            sendChatMessage();
+        };
+        recognizer.onerror = function () {
+            addChatMessage(pick(
+                "Could not hear you. Please try again.",
+                "आवाज़ सुनाई नहीं दी। कृपया फिर से बोलिए।",
+                "आवाज ऐकू आला नाही. कृपया पुन्हा बोला."
+            ), "bot");
+        };
+        recognizer.onend = function () {
+            micBtn.classList.remove("listening");
+            recognizer = null;
+        };
+        recognizer.start();
+    });
+}
+
+
+/* =====================================
+   LANGUAGE CHANGE: refresh weather and stop any speech
+===================================== */
+
+const baseLanguageChange = window.onLanguageChange;
+window.onLanguageChange = function (lang) {
+    if (baseLanguageChange) baseLanguageChange(lang);
+    renderWeather();
+    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+    listenBtn.classList.remove("speaking");
+    voiceNote.textContent = "";
+};

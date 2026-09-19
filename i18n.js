@@ -129,6 +129,9 @@ var HI = {
 "✓ Signed in (Demo)": "✓ साइन इन हुआ (डेमो)",
 "Keep the affected leaf in the centre, in good light.": "प्रभावित पत्ता बीच में रखिए और अच्छी रोशनी में फोटो लीजिए।",
 "Capture": "फोटो लें",
+"🔊 Listen to report": "🔊 रिपोर्ट सुनें",
+"📍 Use my location": "📍 मेरी लोकेशन इस्तेमाल करें",
+"Live weather from your location.": "आपकी लोकेशन का लाइव मौसम।",
 "Cancel": "रद्द करें",
 "Please select a valid image file.": "कृपया सही फोटो फ़ाइल चुनिए।",
 "Image uploaded successfully. Now click Analyze Crop.": "फोटो अपलोड हो गई। अब 'फसल की जाँच करें' दबाइए।",
@@ -177,13 +180,205 @@ var CROP_HI = {
   }
 };
 
+var MR = {
+"Home": "मुख्यपृष्ठ",
+"Features": "वैशिष्ट्ये",
+"Analysis": "तपासणी",
+"Dashboard": "डॅशबोर्ड",
+"About": "आमच्याबद्दल",
+"Sign in": "साइन इन",
+"Your crop companion": "तुमच्या पिकाचा साथीदार",
+"Snap your crop.": "तुमच्या पिकाचा फोटो काढा.",
+"Get a plan made for your farm.": "तुमच्या शेतासाठी योग्य सल्ला मिळवा.",
+"Take a photo of your crop or upload one. AgriShield AI finds the problem and tells you what to do next.": "पिकाचा फोटो काढा किंवा अपलोड करा. AgriShield AI समस्या ओळखतो आणि पुढे काय करायचे ते सांगतो.",
+"Tell us your crop stage and how you water it. AgriShield AI shapes the advice around you.": "पिकाची अवस्था आणि सिंचनाची पद्धत सांगा. सल्ला तुमच्या शेतानुसार तयार होईल.",
+"Check my crop": "माझे पीक तपासा",
+"Possible early blight": "संभाव्य अर्ली ब्लाइट",
+"82% match": "82% जुळणी",
+"Our Smart Features": "आमची स्मार्ट वैशिष्ट्ये",
+"Simple technology to support better crop management.": "पिकाचे उत्तम व्यवस्थापन करण्यासाठी सोपे तंत्रज्ञान.",
+"Crop Detection": "पिकाची ओळख",
+"Upload a crop image and explore possible disease or pest-related information.": "पिकाचा फोटो अपलोड करा आणि संभाव्य रोग किंवा किडींची माहिती पहा.",
+"Risk Alerts": "धोक्याचे इशारे",
+"View weather-related crop risk information in a simple dashboard.": "हवामानामुळे पिकाला असलेला धोका सोप्या डॅशबोर्डवर पहा.",
+"Smart Suggestions": "स्मार्ट सूचना",
+"Get easy-to-understand management suggestions for crop protection.": "पिकाच्या संरक्षणासाठी सोप्या भाषेत सूचना मिळवा.",
+"🌱 Analyze Your Crop": "🌱 तुमच्या पिकाची तपासणी करा",
+"Upload a crop image to explore a sample disease analysis.": "नमुना रोग तपासणी पाहण्यासाठी पिकाचा फोटो अपलोड करा.",
+"Tell us about your farm": "तुमच्या शेताबद्दल सांगा",
+"Your advice will be shaped around these answers.": "तुमचा सल्ला या उत्तरांनुसार तयार होईल.",
+"Your name": "तुमचे नाव",
+"Land size (acres)": "जमीन (एकरात)",
+"Crop stage": "पिकाची अवस्था",
+"How do you water?": "सिंचन कसे करता?",
+"Growing (leaves and stems)": "वाढीची अवस्था (पाने आणि खोड)",
+"Just sown / seedling": "नुकतीच पेरणी / रोपे",
+"Flowering / fruiting": "फुलोरा / फळधारणा",
+"Close to harvest": "काढणीच्या जवळ",
+"Rain-fed": "कोरडवाहू (पावसावर अवलंबून)",
+"Canal": "कालवा",
+"Borewell / tubewell": "बोअरवेल / विहीर",
+"Drip irrigation": "ठिबक सिंचन",
+"e.g. Ramesh": "उदा. रमेश",
+"e.g. 2": "उदा. 2",
+"Select Your Crop:": "तुमचे पीक निवडा:",
+"-- Choose a Crop --": "-- पीक निवडा --",
+"🍅 Tomato": "🍅 टोमॅटो",
+"🥔 Potato": "🥔 बटाटा",
+"🌾 Wheat": "🌾 गहू",
+"🌱 Rice": "🌱 भात",
+"Upload or take a photo of your crop:": "पिकाचा फोटो अपलोड करा किंवा काढा:",
+"Take photo with camera": "कॅमेऱ्याने फोटो काढा",
+"Analyze Crop 🔍": "पिकाची तपासणी करा 🔍",
+"ANALYSIS REPORT": "तपासणी अहवाल",
+"🛡️ Crop Health Report": "🛡️ पिकाच्या आरोग्याचा अहवाल",
+"Demo Result": "डेमो निकाल",
+"Selected Crop": "निवडलेले पीक",
+"Risk Level": "धोक्याची पातळी",
+"Confidence": "विश्वासार्हता",
+"POSSIBLE CONDITION": "संभाव्य समस्या",
+"🔎 Possible Symptoms": "🔎 संभाव्य लक्षणे",
+"💡 Recommended Management": "💡 सुचवलेले व्यवस्थापन",
+"Your plan": "तुमची योजना",
+"Today": "आज",
+"This week": "या आठवड्यात",
+"To prevent it coming back": "पुन्हा होऊ नये यासाठी",
+"Analyzed:": "तपासणीची वेळ:",
+"Report ID:": "अहवाल आयडी:",
+"⚠️ Demo result only. This report is not a professional diagnosis. Consult an agriculture expert before taking treatment decisions.": "⚠️ हा फक्त डेमो निकाल आहे. हा अहवाल व्यावसायिक निदान नाही. उपचाराचा निर्णय घेण्यापूर्वी कृषी तज्ज्ञांचा सल्ला घ्या.",
+"SMART FARMING DASHBOARD": "स्मार्ट शेती डॅशबोर्ड",
+"🌾 Your Crop Overview": "🌾 तुमच्या पिकाची स्थिती",
+"Monitor your crop health and receive simple farming insights.": "पिकाच्या आरोग्यावर लक्ष ठेवा आणि शेतीची सोपी माहिती मिळवा.",
+"Healthy": "निरोगी",
+"Crop Health": "पिकाचे आरोग्य",
+"Overall crop health score": "पिकाच्या एकूण आरोग्याचा स्कोअर",
+"Sample Data": "नमुना डेटा",
+"Weather Status": "हवामानाची स्थिती",
+"Partly cloudy conditions": "अंशतः ढगाळ",
+"💧 Humidity: 65%": "💧 आर्द्रता: 65%",
+"💨 Wind: 12 km/h": "💨 वारा: 12 किमी/तास",
+"Moderate": "मध्यम",
+"Crop Risk Alert": "पिकाचा धोका इशारा",
+"Medium": "मध्यम",
+"High": "जास्त",
+"Low": "कमी",
+"Risk": "धोका",
+"Humidity may increase disease risk.": "आर्द्रतेमुळे रोगाचा धोका वाढू शकतो.",
+"View Details": "तपशील पहा",
+"High humidity helps fungal diseases spread. Avoid overhead watering and check leaves every day.": "जास्त आर्द्रतेमुळे बुरशीजन्य रोग पसरतात. वरून पाणी देणे टाळा आणि रोज पाने तपासा.",
+"📋 Recent Activity": "📋 अलीकडील हालचाली",
+"Crop analysis prototype": "पीक तपासणी प्रोटोटाइप",
+"Upload an image to start analysis.": "तपासणी सुरू करण्यासाठी फोटो अपलोड करा.",
+"Weather monitoring": "हवामानावर देखरेख",
+"Sample weather information is displayed.": "नमुना हवामान माहिती दाखवली आहे.",
+"Crop protection": "पीक संरक्षण",
+"Regularly monitor your crops for visible changes.": "दिसणाऱ्या बदलांसाठी पिकावर नियमित लक्ष ठेवा.",
+"LOCAL DATA STORAGE": "स्थानिक डेटा साठवण",
+"📚 Analysis History": "📚 तपासणीचा इतिहास",
+"Clear History": "इतिहास पुसा",
+"Your demo reports are saved in this browser using local storage.": "तुमचे डेमो अहवाल याच ब्राउझरमध्ये सेव्ह राहतात.",
+"No analysis reports saved yet.": "अजून कोणताही अहवाल सेव्ह नाही.",
+"Report ID": "अहवाल आयडी",
+"Tomato": "टोमॅटो",
+"Potato": "बटाटा",
+"Wheat": "गहू",
+"Rice": "भात",
+"Possible Early Blight": "संभाव्य अर्ली ब्लाइट (लवकर येणारा करपा)",
+"Possible Late Blight": "संभाव्य लेट ब्लाइट (उशिरा येणारा करपा)",
+"Possible Leaf Rust": "संभाव्य पानांवरील तांबेरा (लीफ रस्ट)",
+"Possible Rice Blast": "संभाव्य भातावरील करपा (राइस ब्लास्ट)",
+"About AgriShield AI": "AgriShield AI बद्दल",
+"AgriShield AI is a student-built prototype designed to explore early crop disease detection and farmer-friendly crop management support.": "AgriShield AI हा विद्यार्थ्यांनी बनवलेला प्रोटोटाइप आहे, जो पिकाच्या रोगाची लवकर ओळख आणि शेतकऱ्यांसाठी सोपे पीक व्यवस्थापन यावर काम करतो.",
+"© 2026 AgriShield AI | Student Innovation Project": "© 2026 AgriShield AI | विद्यार्थी इनोव्हेशन प्रोजेक्ट",
+"🤖 AgriBuddy": "🤖 अ‍ॅग्रीबडी",
+"Your farming assistant": "तुमचा शेती सहाय्यक",
+"Namaste bhai! 🌱 Main AgriBuddy hoon. Crop, disease aur farming ke baare mein poochho.": "नमस्कार भाऊ! 🌱 मी अ‍ॅग्रीबडी आहे. पीक, रोग आणि शेतीबद्दल विचारा.",
+"Ask about your crop...": "तुमच्या पिकाबद्दल विचारा...",
+"WELCOME TO AGRISHIELD": "AGRISHIELD मध्ये स्वागत आहे",
+"Sign in to AgriShield AI": "AgriShield AI मध्ये साइन इन करा",
+"Save your crop reports and access your farming workspace.": "तुमचे पीक अहवाल सेव्ह करा आणि तुमच्या शेती वर्कस्पेसमध्ये जा.",
+"Continue with Google": "Google ने सुरू ठेवा",
+"Demo sign-in is enabled for this prototype. Real Google authentication needs Firebase configuration.": "या प्रोटोटाइपमध्ये डेमो साइन-इन चालू आहे. खरे Google लॉगिन चालू करण्यासाठी Firebase सेटअप लागतो.",
+"Demo sign-in successful! Real Google login can be enabled by connecting Firebase Authentication.": "डेमो साइन-इन यशस्वी! खरे Google लॉगिन Firebase Authentication जोडून चालू होईल.",
+"✓ Signed in (Demo)": "✓ साइन इन झाले (डेमो)",
+"Keep the affected leaf in the centre, in good light.": "प्रभावित पान मध्यभागी ठेवा आणि चांगल्या प्रकाशात फोटो काढा.",
+"Capture": "फोटो घ्या",
+"🔊 Listen to report": "🔊 अहवाल ऐका",
+"📍 Use my location": "📍 माझे ठिकाण वापरा",
+"Live weather from your location.": "तुमच्या ठिकाणाचे थेट हवामान.",
+"Cancel": "रद्द करा",
+"Please select a valid image file.": "कृपया योग्य फोटो फाइल निवडा.",
+"Image uploaded successfully. Now click Analyze Crop.": "फोटो अपलोड झाला. आता 'पिकाची तपासणी करा' दाबा.",
+"Please select a crop first.": "आधी पीक निवडा.",
+"Please upload a crop image first.": "आधी पिकाचा फोटो अपलोड करा.",
+"Demo analysis completed successfully!": "डेमो तपासणी पूर्ण झाली!",
+"Camera could not start. Allow camera access in your browser, or use the upload option.": "कॅमेरा सुरू होऊ शकला नाही. ब्राउझरमध्ये कॅमेऱ्याची परवानगी द्या किंवा अपलोडचा पर्याय वापरा.",
+"Seedlings are delicate and infection spreads fast, so check them every 2 to 3 days.": "रोपे नाजूक असतात आणि संसर्ग लवकर पसरतो, म्हणून दर 2 ते 3 दिवसांनी तपासा.",
+"Leaves are your early warning. Check the underside of leaves too, not just the top.": "पाने तुम्हाला आधीच इशारा देतात. पानांच्या खालच्या बाजूलाही पहा, फक्त वरची बाजू नको.",
+"Flowering is a sensitive stage. Acting early protects your flowers and fruit.": "फुलोऱ्याचा काळ नाजूक असतो. लवकर उपाय केल्यास फुले आणि फळे वाचतात.",
+"You are close to harvest. Check the waiting period on any spray label before picking.": "काढणी जवळ आहे. तोडणीपूर्वी कोणत्याही फवारणीच्या लेबलवरील प्रतीक्षा कालावधी पाहून घ्या.",
+"Rain-fed field: after rain, wet leaves raise disease risk, so inspect the crop the next morning.": "कोरडवाहू शेत: पावसानंतर ओल्या पानांमुळे रोगाचा धोका वाढतो, म्हणून दुसऱ्या दिवशी सकाळी पीक तपासा.",
+"Canal water: avoid flooding the field and irrigate in the morning so leaves dry by evening.": "कालव्याचे पाणी: शेतात पाणी साचू देऊ नका आणि सकाळी पाणी द्या, म्हणजे संध्याकाळपर्यंत पाने कोरडी होतील.",
+"Borewell: water in the morning and avoid over-irrigation. Wet soil helps disease spread.": "बोअरवेल: सकाळी पाणी द्या आणि जास्त पाणी देणे टाळा. ओल्या मातीत रोग पसरतो.",
+"Drip irrigation: you already keep leaves dry, so keep it that way and check for leaks near affected plants.": "ठिबक सिंचन: तुम्ही पाने कोरडी ठेवताच, तसेच ठेवा आणि प्रभावित झाडांजवळ गळती आहे का ते पहा."
+};
+
+var CROP_MR = {
+  tomato: {
+    cropName: "टोमॅटो",
+    disease: "संभाव्य अर्ली ब्लाइट (लवकर येणारा करपा)",
+    description: "निवडलेल्या पिकात अर्ली ब्लाइटसारख्या लक्षणांचा नमुना आढळतो.",
+    symptoms: ["पानांवर तपकिरी डाग", "पाने पिवळी पडणे", "झाडाची कमकुवत वाढ"],
+    suggestions: ["जास्त बाधित पाने गरज असल्यास काढून टाका", "वरून पाणी देणे टाळा", "शेत स्वच्छ ठेवा", "आजूबाजूच्या झाडांवर लक्ष ठेवा", "स्थानिक कृषी तज्ज्ञांचा सल्ला घ्या"]
+  },
+  potato: {
+    cropName: "बटाटा",
+    disease: "संभाव्य लेट ब्लाइट (उशिरा येणारा करपा)",
+    description: "निवडलेल्या पिकात लेट ब्लाइटसारख्या लक्षणांचा नमुना आढळतो.",
+    symptoms: ["पानांवर गडद डाग", "ओलाव्यात पानांचे जास्त नुकसान", "झाडाच्या भागांवर तपकिरी खुणा"],
+    suggestions: ["आजूबाजूच्या झाडांकडे बारकाईने पहा", "जास्त ओलावा टाळा", "शेत स्वच्छ ठेवा", "पिकावर नियमित लक्ष ठेवा", "उपचारापूर्वी तज्ज्ञांचा सल्ला घ्या"]
+  },
+  wheat: {
+    cropName: "गहू",
+    disease: "संभाव्य पानांवरील तांबेरा (लीफ रस्ट)",
+    description: "निवडलेल्या पिकात पानांवरील तांबेऱ्यासारख्या लक्षणांचा नमुना आढळतो.",
+    symptoms: ["पानांवर केशरी किंवा तपकिरी डाग", "पानांच्या आरोग्यात घट", "रंगात स्पष्ट बदल"],
+    suggestions: ["संपूर्ण शेताची पाहणी करा", "पिकाच्या वाढीवर नियमित लक्ष ठेवा", "बाधित झाडांचे भाग गरज असल्यास काढा", "शेताचे योग्य व्यवस्थापन ठेवा", "कृषी तज्ज्ञांचा सल्ला घ्या"]
+  },
+  rice: {
+    cropName: "भात",
+    disease: "संभाव्य भातावरील करपा (राइस ब्लास्ट)",
+    description: "निवडलेल्या पिकात करप्यासारख्या लक्षणांचा नमुना आढळतो.",
+    symptoms: ["पानांवर दोन्ही टोकांना निमुळते डाग", "पानांचा रंग बदलणे", "झाडाच्या आरोग्यात घट"],
+    suggestions: ["बाधित भागांवर नियमित लक्ष ठेवा", "नत्रयुक्त खत जास्त टाकणे टाळा", "शेताचे योग्य व्यवस्थापन ठेवा", "आजूबाजूच्या झाडांची तपासणी करा", "स्थानिक कृषी तज्ज्ञांचा सल्ला घ्या"]
+  }
+};
+
+var DICTS = { hi: HI, mr: MR };
+var CROP_TR = { hi: CROP_HI, mr: CROP_MR };
+var LANG_TITLES = {
+    en: "AgriShield AI | Smart Crop Protection",
+    hi: "AgriShield AI | स्मार्ट फसल सुरक्षा",
+    mr: "AgriShield AI | स्मार्ट पीक संरक्षण"
+};
+
 function currentLang() {
-    try { return localStorage.getItem(LANG_KEY) === "hi" ? "hi" : "en"; } catch (e) { return "en"; }
+    try {
+        var v = localStorage.getItem(LANG_KEY);
+        return v === "hi" || v === "mr" ? v : "en";
+    } catch (e) { return "en"; }
 }
 
 // Translate a string in code (messages, tips). Falls back to the English text.
 function tr(text) {
-    return currentLang() === "hi" && HI[text] ? HI[text] : text;
+    var dict = DICTS[currentLang()];
+    return dict && dict[text] ? dict[text] : text;
+}
+
+// Choose the text for the current language: pick(english, hindi, marathi)
+function pick(en, hi, mr) {
+    var lang = currentLang();
+    return lang === "hi" ? hi : (lang === "mr" ? mr : en);
 }
 
 var I18N_NODES = null;
@@ -216,22 +411,23 @@ function collectI18n() {
 }
 
 function setLanguage(lang) {
-    lang = lang === "hi" ? "hi" : "en";
+    lang = (lang === "hi" || lang === "mr") ? lang : "en";
     try { localStorage.setItem(LANG_KEY, lang); } catch (e) {}
     document.documentElement.lang = lang;
     if (!I18N_NODES) collectI18n();
+    var dict = DICTS[lang];
 
     I18N_NODES.forEach(function (item) {
-        if (lang === "hi") {
-            item.node.nodeValue = item.orig.replace(item.orig.trim(), function () { return HI[item.key]; });
+        if (dict && dict[item.key]) {
+            item.node.nodeValue = item.orig.replace(item.orig.trim(), function () { return dict[item.key]; });
         } else {
             item.node.nodeValue = item.orig;
         }
     });
     I18N_ATTRS.forEach(function (item) {
-        item.el.setAttribute("placeholder", lang === "hi" ? HI[item.orig] : item.orig);
+        item.el.setAttribute("placeholder", dict && dict[item.orig] ? dict[item.orig] : item.orig);
     });
-    document.title = lang === "hi" ? "AgriShield AI | स्मार्ट फसल सुरक्षा" : "AgriShield AI | Smart Crop Protection";
+    document.title = LANG_TITLES[lang];
 
     if (typeof window.onLanguageChange === "function") window.onLanguageChange(lang);
 }

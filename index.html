@@ -55,6 +55,7 @@
         <select id="languageSelect" aria-label="Select language">
             <option value="en">English</option>
             <option value="hi">हिंदी</option>
+                <option value="mr">मराठी</option>
         </select>
     </div>
     <button class="login-btn" id="openLoginBtn">Sign in</button>
@@ -265,6 +266,9 @@
         <div id="planList"></div>
     </div>
 
+    <button type="button" class="listen-btn" id="listenBtn">🔊 Listen to report</button>
+    <p class="voice-note" id="voiceNote"></p>
+
     <div class="report-footer">
         <span>🕒 <strong>Analyzed:</strong> <span id="analysisTime">-</span></span>
         <span>🆔 <strong>Report ID:</strong> <span id="reportId">-</span></span>
@@ -314,17 +318,19 @@
         <div class="dashboard-card">
             <div class="dashboard-card-top">
                 <span class="dashboard-icon">🌦️</span>
-                <span class="status-badge">Sample Data</span>
+                <span class="status-badge" id="weatherBadge">Sample Data</span>
             </div>
 
             <h3>Weather Status</h3>
-            <p class="dashboard-value">28°C</p>
-            <p>Partly cloudy conditions</p>
+            <p class="dashboard-value" id="weatherTemp">28°C</p>
+            <p id="weatherDesc">Partly cloudy conditions</p>
 
             <div class="weather-details">
-                <span>💧 Humidity: 65%</span>
-                <span>💨 Wind: 12 km/h</span>
+                <span id="weatherHumidity">💧 Humidity: 65%</span>
+                <span id="weatherWind">💨 Wind: 12 km/h</span>
             </div>
+            <p class="weather-place" id="weatherPlace"></p>
+            <button type="button" class="small-btn" id="useLocationBtn">📍 Use my location</button>
         </div>
 
 
@@ -332,12 +338,12 @@
         <div class="dashboard-card risk-card">
             <div class="dashboard-card-top">
                 <span class="dashboard-icon">🔔</span>
-                <span class="status-badge warning">Moderate</span>
+                <span class="status-badge warning" id="riskBadge">Moderate</span>
             </div>
 
             <h3>Crop Risk Alert</h3>
-            <p class="dashboard-value">Medium</p>
-            <p>Humidity may increase disease risk.</p>
+            <p class="dashboard-value" id="riskValue">Medium</p>
+            <p id="riskText">Humidity may increase disease risk.</p>
 
             <button class="small-btn" id="riskDetailsBtn">
                 View Details
@@ -365,7 +371,7 @@
             <span>🌦️</span>
             <div>
                 <strong>Weather monitoring</strong>
-                <p>Sample weather information is displayed.</p>
+                <p id="weatherActivity">Sample weather information is displayed.</p>
             </div>
         </div>
 
@@ -443,6 +449,8 @@
             id="chatInput"
             placeholder="Ask about your crop..."
         >
+
+        <button id="micBtn" type="button" class="mic-btn" aria-label="Speak">🎤</button>
 
         <button id="sendChatBtn">
             ➤
