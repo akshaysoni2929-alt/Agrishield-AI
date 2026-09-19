@@ -727,3 +727,44 @@ function getBotResponseHi(text) {
 
 languageSelect.value = currentLang();
 setLanguage(currentLang());
+
+
+/* =====================================
+   MOBILE MENU + NEON TAP GLOW
+===================================== */
+
+const siteNav = document.querySelector(".navbar");
+const siteNavToggle = document.getElementById("navToggle");
+
+function setMenu(open) {
+    siteNav.classList.toggle("open", open);
+    siteNavToggle.setAttribute("aria-expanded", String(open));
+}
+
+siteNavToggle.addEventListener("click", function () {
+    setMenu(!siteNav.classList.contains("open"));
+});
+siteNav.querySelectorAll(".nav-links a, .login-btn").forEach(function (el) {
+    el.addEventListener("click", function () { setMenu(false); });
+});
+document.addEventListener("click", function (event) {
+    if (!siteNav.contains(event.target)) setMenu(false);
+});
+document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") setMenu(false);
+});
+window.addEventListener("resize", function () {
+    if (window.innerWidth > 900) setMenu(false);
+});
+
+// Tap or click on an icon (or its card) gives a short neon green glow
+const NEON_TARGETS = ".feature-icon, .dashboard-icon, .login-icon, .brand-icon, .chatbot-toggle";
+document.addEventListener("pointerdown", function (event) {
+    const hit = event.target.closest(NEON_TARGETS + ", .feature-card, .dashboard-card");
+    if (!hit) return;
+    const icon = hit.matches(NEON_TARGETS) ? hit : hit.querySelector(NEON_TARGETS);
+    if (!icon) return;
+    icon.classList.add("glow-pulse");
+    clearTimeout(icon._glowTimer);
+    icon._glowTimer = setTimeout(function () { icon.classList.remove("glow-pulse"); }, 900);
+});

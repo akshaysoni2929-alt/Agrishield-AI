@@ -121,3 +121,58 @@ footer p{color:var(--muted)}
 .hero h1{font-size:clamp(32px,4.6vw,52px);font-weight:700;letter-spacing:-.02em;line-height:1.15}
 html[lang="hi"] :is(h1,h2,h3,h4,h5){line-height:1.4;letter-spacing:0}
 @media (max-width:860px){.brand-name{font-size:26px}.brand-icon svg{width:44px;height:44px}}
+
+/* =====================================
+   FINAL POLISH: mobile menu, neon icon glow, small details
+===================================== */
+:root{--neon:#39FF88}
+html{-webkit-text-size-adjust:100%}
+::selection{background:rgba(57,255,136,.3);color:#fff}
+*{scrollbar-color:#24443A var(--bg);scrollbar-width:thin}
+button,.primary-btn,.small-btn,.login-btn,.camera-btn{-webkit-tap-highlight-color:transparent;transition:transform .15s ease,background-color .25s ease,box-shadow .25s ease}
+button:active,.primary-btn:active{transform:scale(.97)}
+
+/* Clean logo: no old box behind the shield */
+.brand-icon{width:auto!important;height:auto!important;background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;display:flex;align-items:center}
+.brand-icon svg{width:54px!important;height:54px!important;transition:filter .25s ease}
+
+/* Neon green glow when an icon is hovered or tapped */
+.feature-icon,.dashboard-icon,.login-icon,.chatbot-toggle{transition:box-shadow .25s ease,transform .25s ease;-webkit-tap-highlight-color:transparent;cursor:pointer}
+.feature-icon,.dashboard-icon,.login-icon{border-radius:16px}
+.feature-icon:hover,.dashboard-icon:hover,.login-icon:hover,.chatbot-toggle:hover,
+.feature-card:hover .feature-icon,.dashboard-card:hover .dashboard-icon,
+.glow-pulse{box-shadow:0 0 0 1.5px var(--neon),0 0 14px rgba(57,255,136,.7),0 0 36px rgba(57,255,136,.4)!important;transform:translateY(-2px)}
+.brand-icon:hover svg,.brand-icon.glow-pulse svg{filter:drop-shadow(0 0 5px var(--neon)) drop-shadow(0 0 16px rgba(57,255,136,.6))}
+.brand-icon.glow-pulse{box-shadow:none!important;transform:none}
+.nav-links a:hover{color:var(--neon);text-shadow:0 0 12px rgba(57,255,136,.5)}
+
+/* Hamburger button (phones and tablets) */
+.nav-toggle{display:none;width:46px;height:46px;padding:0;border:1px solid var(--line);background:var(--surface);border-radius:12px;cursor:pointer;flex-direction:column;align-items:center;justify-content:center;gap:5px;-webkit-tap-highlight-color:transparent}
+.nav-toggle span{display:block;width:22px;height:2.5px;border-radius:2px;background:var(--ink);transition:transform .25s ease,opacity .2s ease}
+.navbar.open .nav-toggle{border-color:var(--neon);box-shadow:0 0 14px rgba(57,255,136,.45)}
+.navbar.open .nav-toggle span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+.navbar.open .nav-toggle span:nth-child(2){opacity:0}
+.navbar.open .nav-toggle span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+
+@media (max-width:900px){
+  .navbar{flex-direction:row!important;flex-wrap:wrap!important;justify-content:space-between!important;align-items:center!important;gap:0 10px!important;padding:10px 5%!important}
+  .navbar .brand-logo{order:1}
+  .navbar .nav-toggle{display:flex;order:2}
+  .navbar .nav-links,.navbar .nav-actions{display:none!important;width:100%}
+  .navbar.open .nav-links{display:flex!important;order:3;flex-direction:column;flex-wrap:nowrap;gap:0!important;margin-top:10px;border-top:1px solid var(--line)}
+  .navbar.open .nav-links a{padding:15px 4px;font-size:17px;border-bottom:1px solid var(--line)}
+  .navbar .nav-links a::after{display:none}
+  .navbar.open .nav-actions{display:flex!important;order:4;gap:12px;margin:14px 0 6px!important}
+  .navbar.open .nav-actions>*{flex:1}
+  .navbar.open .language-control select{width:100%;padding:12px;font-size:15px}
+  .navbar.open .login-btn{width:100%;padding:12px;font-size:15px}
+  .brand-icon svg{width:44px!important;height:44px!important}
+  .brand-name{font-size:26px}
+}
+@media (max-width:600px){
+  .features,.analyze-section,.dashboard-section,.about{padding:48px 6%}
+}
+@media (max-width:420px){
+  .brand-name{font-size:23px}
+  .brand-icon svg{width:40px!important;height:40px!important}
+}
